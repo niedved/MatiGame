@@ -36,7 +36,9 @@ typedef NS_ENUM(NSInteger, TTGPuzzleVerifyPattern) {
  */
 @interface TTGPuzzleVerifyView : UIView
 @property (nonatomic, strong) UIImage *image; // Image for verification
-@property (nonatomic, strong) Puzzle *puzzle; // Puzzle
+@property (nonatomic, strong) Puzzle *puzzle1; // Puzzle
+@property (nonatomic, strong) Puzzle *puzzle2; // Puzzle
+@property (nonatomic, strong) Puzzle *puzzle3; // Puzzle
 
 // Puzzle pattern, default is TTGPuzzleVerifyClassicPattern
 @property (nonatomic, assign) TTGPuzzleVerifyPattern puzzlePattern;
@@ -55,19 +57,6 @@ typedef NS_ENUM(NSInteger, TTGPuzzleVerifyPattern) {
  * Style
  */
 
-// Puzzle blank alpha, default is 0.5
-@property (nonatomic, assign) CGFloat puzzleBlankAlpha;
-
-// Puzzle blank inner shadow
-@property (nonatomic, strong) UIColor *puzzleBlankInnerShadowColor; // Default: black
-@property (nonatomic, assign) CGFloat puzzleBlankInnerShadowRadius; // Default: 4
-@property (nonatomic, assign) CGFloat puzzleBlankInnerShadowOpacity; // Default: 0.5
-@property (nonatomic, assign) CGSize puzzleBlankInnerShadowOffset; // Default: (0, 0)
-
-// Puzzle shadow
-@property (nonatomic, strong) UIColor *puzzleShadowColor; // Default: black
-@property (nonatomic, assign) CGFloat puzzleShadowRadius; // Default: 4
-@property (nonatomic, assign) CGSize puzzleShadowOffset; // Default: (0, 0)
 
 // Callback
 @property (nonatomic, weak) id <TTGPuzzleVerifyViewDelegate> delegate; // Callback delegate

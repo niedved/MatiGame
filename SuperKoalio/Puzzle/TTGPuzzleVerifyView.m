@@ -17,7 +17,6 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 
 @property (nonatomic, strong) UIImageView *frontImageView;
 
-@property (nonatomic, strong) UIImageView *puzzleImageView;
 
 @property (nonatomic, assign) BOOL lastVerification;
 @end
@@ -42,6 +41,56 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     return self;
 }
 
+// Back puzzle blank image view
+-(void)preapreBackImageView{
+    self.backImageView = [[UIImageView alloc] initWithFrame:self.bounds];
+    self.backImageView.userInteractionEnabled = NO;
+    self.backImageView.contentMode = UIViewContentModeScaleToFill;
+    self.backImageView.alpha = 0.5f;
+    [self addSubview:self.backImageView];
+    
+    [self preapreBackImageView_shadowForPuzzleBlankSpace];
+    
+}
+
+-(void)preapreBackImageView_shadowForPuzzleBlankSpace{
+    // Inner shadow layer
+    self.backInnerShadowLayer = [CAShapeLayer layer];
+    self.backInnerShadowLayer.frame = self.bounds;
+    self.backInnerShadowLayer.fillRule = kCAFillRuleEvenOdd;
+    self.backInnerShadowLayer.shadowColor =  [UIColor orangeColor].CGColor;
+    self.backInnerShadowLayer.shadowRadius = 15;
+    self.backInnerShadowLayer.shadowOpacity = 0.9;
+    self.backInnerShadowLayer.shadowOffset = CGSizeMake(0, 0);
+}
+    
+-(void)preapreFrontImageView{
+    self.frontImageView = [[UIImageView alloc] initWithFrame:self.bounds];
+    self.frontImageView.userInteractionEnabled = NO;
+    self.frontImageView.contentMode = UIViewContentModeScaleToFill;
+    [self addSubview:self.frontImageView];
+}
+
+-(void)preparePuzzles{
+    self.puzzle1 = [[Puzzle alloc] initCirclePuzzleWithSize:CGSizeMake(100, 100) puzzleSlotPosition:CGPointMake(40, 10) puzzlePosition:CGPointMake(40,100) tag:1]; //o,o srodek
+    [self.puzzle1 createPuzzleImageContainerViewWithBounds: self.bounds];
+    [self addSubview:self.puzzle1.puzzleImageContainerView];
+    
+    
+    self.puzzle2 = [[Puzzle alloc] initCirclePuzzleWithSize:CGSizeMake(100, 100) puzzleSlotPosition:CGPointMake(240, 10) puzzlePosition:CGPointMake(240,100) tag:2]; //o,o srodek
+    [self.puzzle2 createPuzzleImageContainerViewWithBounds: self.bounds];
+    [self addSubview:self.puzzle2.puzzleImageContainerView];
+    
+    
+    self.puzzle3 = [[Puzzle alloc] initCirclePuzzleWithSize:CGSizeMake(100, 100) puzzleSlotPosition:CGPointMake(440, 10) puzzlePosition:CGPointMake(440,100) tag:3]; //o,o srodek
+    [self.puzzle3 createPuzzleImageContainerViewWithBounds: self.bounds];
+    [self addSubview:self.puzzle3.puzzleImageContainerView];
+    
+    
+    
+}
+
+
 - (void)commonInit {
     if (_backImageView) {
         return;
@@ -55,54 +104,12 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     self.puzzlePattern = TTGPuzzleVerifyCirclePattern;
     
     // Back puzzle blank image view
-    _backImageView = [[UIImageView alloc] initWithFrame:self.bounds];
-    _backImageView.userInteractionEnabled = NO;
-    _backImageView.contentMode = UIViewContentModeScaleToFill;
-    _backImageView.backgroundColor = [UIColor clearColor];
-    _backImageView.alpha = _puzzleBlankAlpha;
-    [self addSubview:_backImageView];
-    
+    [self preapreBackImageView];
     // Front puzzle hole image view
-    _frontImageView = [[UIImageView alloc] initWithFrame:self.bounds];
-    _frontImageView.userInteractionEnabled = NO;
-    _frontImageView.contentMode = UIViewContentModeScaleToFill;
-    _frontImageView.backgroundColor = [UIColor clearColor];
-    [self addSubview:_frontImageView];
+    [self preapreFrontImageView];
+    // Create puzzle
+    [self preparePuzzles];
     
-    
-    self.puzzle = [[Puzzle alloc] initCirclePuzzleWithSize:CGSizeMake(100, 100) puzzlePosition:CGPointMake(0, 30)]; //o,o srodek
-    [self.puzzle createPuzzleImageContainerViewWithBounds: self.bounds];
-    [self addSubview:self.puzzle.puzzleImageContainerView];
-    
-  
-    
-    self.puzzleBlankAlpha = 0.5;
-    self.puzzleBlankInnerShadowColor = [UIColor blackColor];
-    self.puzzleBlankInnerShadowRadius = 4;
-    self.puzzleBlankInnerShadowOpacity = 0.5;
-    self.puzzleBlankInnerShadowOffset = CGSizeZero;
-
-    self.puzzleShadowColor = [UIColor blackColor];
-    self.puzzleShadowRadius = 4;
-    self.puzzleShadowOffset = CGSizeZero;
-
-
-    // Puzzle piece imageView
-    _puzzleImageView = [[UIImageView alloc] initWithFrame:self.puzzle.puzzleImageContainerView.bounds];
-    _puzzleImageView.userInteractionEnabled = NO;
-    _puzzleImageView.contentMode = UIViewContentModeScaleToFill;
-    _puzzleImageView.backgroundColor = [UIColor clearColor];
-    [self.puzzle.puzzleImageContainerView addSubview:_puzzleImageView];
-
-    // Inner shadow layer
-    _backInnerShadowLayer = [CAShapeLayer layer];
-    _backInnerShadowLayer.frame = self.bounds;
-    _backInnerShadowLayer.fillRule = kCAFillRuleEvenOdd;
-    _backInnerShadowLayer.shadowColor = _puzzleBlankInnerShadowColor.CGColor;
-    _backInnerShadowLayer.shadowRadius = _puzzleBlankInnerShadowRadius;
-    _backInnerShadowLayer.shadowOpacity = _puzzleBlankInnerShadowOpacity;
-    _backInnerShadowLayer.shadowOffset = _puzzleBlankInnerShadowOffset;
-
     // Pan gesture
     UIPanGestureRecognizer *panGestureRecognizer = [UIPanGestureRecognizer new];
     [panGestureRecognizer addTarget:self action:@selector(onPanGesture:)];
@@ -115,15 +122,15 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     if (withAnimation) {
         [UIView animateWithDuration:kTTGPuzzleAnimationDuration animations:^{
             if (_enable) {
-                    [self.puzzle setPuzzlePosition:self.puzzle.puzzleBlankPosition];
+                    [self.puzzle1 setPuzzlePosition:self.puzzle1.puzzleBlankPosition];
             }
-            self.puzzle.puzzleImageContainerView.layer.shadowOpacity = 0;
+            self.puzzle1.puzzleImageContainerView.layer.shadowOpacity = 0;
         }];
     } else {
         if (_enable) {
-            [self.puzzle setPuzzlePosition:self.puzzle.puzzleBlankPosition];
+            [self.puzzle1 setPuzzlePosition:self.puzzle1.puzzleBlankPosition];
         }
-        self.puzzle.puzzleImageContainerView.layer.shadowOpacity = 0;
+        self.puzzle1.puzzleImageContainerView.layer.shadowOpacity = 0;
     }
 }
 
@@ -134,21 +141,32 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 
     // New position
     CGPoint position = CGPointZero;
-    position.x = panLocation.x - self.puzzle.puzzleSize.width / 2;
-    position.y = panLocation.y - self.puzzle.puzzleSize.height / 2;
+    position.x = panLocation.x - self.puzzle1.puzzleSize.width / 2;
+    position.y = panLocation.y - self.puzzle1.puzzleSize.height / 2;
 
     // Update position
     if (panGestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        // Animate move
-        [UIView animateWithDuration:kTTGPuzzleAnimationDuration animations:^{
-            [self.puzzle setPuzzlePosition:position];
-        }];
+        NSLog(@"p1: %f , %f", self.puzzle1.puzzleImageView.frame.size.width, self.puzzle1.puzzleImageView.frame.size.height );
+        if ( [self.puzzle1.puzzleImageView pointInside:panLocation withEvent:nil] ) {
+            // Point lies inside the bounds
+            NSLog(@"inside: ");
+            // Animate move
+            [UIView animateWithDuration:kTTGPuzzleAnimationDuration animations:^{
+                [self.puzzle1 setPuzzlePosition:position];
+            }];
+        }
+        else{
+            NSLog(@"outside");
+        }
+        
+        
+        
     } else {
-        [self.puzzle setPuzzlePosition:position];
+//        [self.puzzle1 setPuzzlePosition:position];
     }
     
     // Callback
-    [self performCallback];
+//    [self performCallback];
 }
 
 #pragma mark - Override
@@ -158,10 +176,10 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 
     _backImageView.frame = self.bounds;
     _frontImageView.frame = self.bounds;
-    self.puzzle.puzzleImageContainerView.frame = CGRectMake(
-            self.puzzle.puzzleContainerPosition.x, self.puzzle.puzzleContainerPosition.y,
+    self.puzzle1.puzzleImageContainerView.frame = CGRectMake(
+            self.puzzle1.puzzleContainerPosition.x, self.puzzle1.puzzleContainerPosition.y,
             CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
-    _puzzleImageView.frame = self.puzzle.puzzleImageContainerView.bounds;
+    self.puzzle1.puzzleImageView.frame = self.puzzle1.puzzleImageContainerView.bounds;
     
     [self updatePuzzleMask];
 }
@@ -204,7 +222,7 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 
     _backImageView.layer.mask = backMaskLayer;
     _frontImageView.layer.mask = frontMaskLayer;
-    _puzzleImageView.layer.mask = puzzleMaskLayer;
+    self.puzzle1.puzzleImageView.layer.mask = puzzleMaskLayer;
 
     // Puzzle blank inner shadow
     UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:CGRectInset(self.bounds, -20, -20)]; // Outer rect
@@ -255,14 +273,14 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
         path = [UIBezierPath bezierPathWithCGPath:[TTGPuzzleVerifyView verifyPathForPattern:_puzzlePattern].CGPath];
         // Apply scale transform
         [path applyTransform:CGAffineTransformMakeScale(
-                                                        self.puzzle.puzzleSize.width / path.bounds.size.width,
-                                                        self.puzzle.puzzleSize.height / path.bounds.size.height)];
+                                                        self.puzzle1.puzzleSize.width / path.bounds.size.width,
+                                                        self.puzzle1.puzzleSize.height / path.bounds.size.height)];
 //    }
     
     // Apply position transform
     [path applyTransform:CGAffineTransformMakeTranslation(
-            self.puzzle.puzzleBlankPosition.x - path.bounds.origin.x,
-            self.puzzle.puzzleBlankPosition.y - path.bounds.origin.y)];
+            self.puzzle1.puzzleBlankPosition.x - path.bounds.origin.x,
+            self.puzzle1.puzzleBlankPosition.y - path.bounds.origin.y)];
     
     return path;
 }
@@ -272,14 +290,14 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 
 
 - (CGPoint)puzzlePosition {
-    return CGPointMake(self.puzzle.puzzleContainerPosition.x + self.puzzle.puzzleBlankPosition.x,
-                       self.puzzle.puzzleContainerPosition.y + self.puzzle.puzzleBlankPosition.y);
+    return CGPointMake(self.puzzle1.puzzleContainerPosition.x + self.puzzle1.puzzleBlankPosition.x,
+                       self.puzzle1.puzzleContainerPosition.y + self.puzzle1.puzzleBlankPosition.y);
 }
 
 // Puzzle blank position
 
 - (void)setPuzzleBlankPosition:(CGPoint)puzzleBlankPosition {
-    self.puzzle.puzzleBlankPosition = puzzleBlankPosition;
+    self.puzzle1.puzzleBlankPosition = puzzleBlankPosition;
     [self updatePuzzleMask];
 }
 
@@ -296,14 +314,14 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     _image = image;
     _backImageView.image = _image;
     _frontImageView.image = _image;
-    _puzzleImageView.image = _image;
+    self.puzzle1.puzzleImageView.image = _image;
     [self updatePuzzleMask];
 }
 
 // Puzzle size
 
 - (void)setPuzzleSize:(CGSize)puzzleSize {
-    self.puzzle.puzzleSize = puzzleSize;
+    self.puzzle1.puzzleSize = puzzleSize;
     [self updatePuzzleMask];
 }
 
@@ -330,7 +348,7 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 }
 
 - (CGFloat)puzzleMaxX {
-    return CGRectGetWidth(self.bounds) - self.puzzle.puzzleSize.width;
+    return CGRectGetWidth(self.bounds) - self.puzzle1.puzzleSize.width;
 }
 
 - (CGFloat)puzzleMinY {
@@ -338,7 +356,7 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 }
 
 - (CGFloat)puzzleMaxY {
-    return CGRectGetHeight(self.bounds) - self.puzzle.puzzleSize.height;
+    return CGRectGetHeight(self.bounds) - self.puzzle1.puzzleSize.height;
 }
 
 - (void)setPuzzleXPercentage:(CGFloat)puzzleXPercentage {
@@ -353,7 +371,7 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     // Change position
     CGPoint position = [self puzzlePosition];
     position.x = puzzleXPercentage * ([self puzzleMaxX] - [self puzzleMinX]) + [self puzzleMinX];
-    [self.puzzle setPuzzlePosition:position];
+    [self.puzzle1 setPuzzlePosition:position];
     
     // Callback
     [self performCallback];
@@ -377,7 +395,7 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     // Change position
     CGPoint position = [self puzzlePosition];
     position.y = puzzleYPercentage * ([self puzzleMaxY] - [self puzzleMinY]) + [self puzzleMinY];
-    [self.puzzle setPuzzlePosition:position];
+    [self.puzzle1 setPuzzlePosition:position];
     
     // Callback
     [self performCallback];
@@ -386,56 +404,10 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 // isVerified
 
 - (BOOL)isVerified {
-    return fabsf([self puzzlePosition].x - self.puzzle.puzzleBlankPosition.x) <= self.puzzle.verificationTolerance &&
-           fabsf([self puzzlePosition].y - self.puzzle.puzzleBlankPosition.y) <= self.puzzle.verificationTolerance;
-}
-
-// Puzzle shadow
-
-- (void)setPuzzleShadowColor:(UIColor *)puzzleShadowColor {
-    _puzzleShadowColor = puzzleShadowColor;
-    self.puzzle.puzzleImageContainerView.layer.shadowColor = puzzleShadowColor.CGColor;
-}
-
-- (void)setPuzzleShadowRadius:(CGFloat)puzzleShadowRadius {
-    _puzzleShadowRadius = puzzleShadowRadius;
-    self.puzzle.puzzleImageContainerView.layer.shadowRadius = puzzleShadowRadius;
+    return fabsf([self puzzlePosition].x - self.puzzle1.puzzleBlankPosition.x) <= self.puzzle1.verificationTolerance &&
+           fabsf([self puzzlePosition].y - self.puzzle1.puzzleBlankPosition.y) <= self.puzzle1.verificationTolerance;
 }
 
 
-
-- (void)setPuzzleShadowOffset:(CGSize)puzzleShadowOffset {
-    _puzzleShadowOffset = puzzleShadowOffset;
-    self.puzzle.puzzleImageContainerView.layer.shadowOffset = puzzleShadowOffset;
-}
-
-// Puzzle blank alpha
-
-- (void)setPuzzleBlankAlpha:(CGFloat)puzzleBlankAlpha {
-    _puzzleBlankAlpha = puzzleBlankAlpha;
-    _backImageView.alpha = puzzleBlankAlpha;
-}
-
-// Puzzle blank inner shadow
-
-- (void)setPuzzleBlankInnerShadowColor:(UIColor *)puzzleBlankInnerShadowColor {
-    _puzzleBlankInnerShadowColor = puzzleBlankInnerShadowColor;
-    _backInnerShadowLayer.shadowColor = puzzleBlankInnerShadowColor.CGColor;
-}
-
-- (void)setPuzzleBlankInnerShadowRadius:(CGFloat)puzzleBlankInnerShadowRadius {
-    _puzzleBlankInnerShadowRadius = puzzleBlankInnerShadowRadius;
-    _backInnerShadowLayer.shadowRadius = puzzleBlankInnerShadowRadius;
-}
-
-- (void)setPuzzleBlankInnerShadowOpacity:(CGFloat)puzzleBlankInnerShadowOpacity {
-    _puzzleBlankInnerShadowOpacity = puzzleBlankInnerShadowOpacity;
-    _backInnerShadowLayer.shadowOpacity = puzzleBlankInnerShadowOpacity;
-}
-
-- (void)setPuzzleBlankInnerShadowOffset:(CGSize)puzzleBlankInnerShadowOffset {
-    _puzzleBlankInnerShadowOffset = puzzleBlankInnerShadowOffset;
-    _backInnerShadowLayer.shadowOffset = puzzleBlankInnerShadowOffset;
-}
 
 @end

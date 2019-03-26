@@ -55,45 +55,16 @@
     // add the effect view to the image view
     [self.bgImageView addSubview:effectView];
     
-    
-    
-   
-    
     [self preapreRandom];
     
 }
-
-//-(void)prepareCirclePuzzleWithPlace:(CGPoint)placetoplace{
-//
-//
-//
-//    return pvv;
-//}
 
 
 -(void)preapreRandom{
     _puzzleVerifyView.delegate = self;
     _puzzleVerifyView.image = _picture;
-//    _puzzleVerifyView = [self prepareCirclePuzzleWithPlace:CGPointMake(140,140) ];
-//
-//    _puzzleVerifyView.puzzleXPercentage = 0.5;//
-//
-//    _puzzleVerifyView.puzzlePattern = TTGPuzzleVerifyCirclePattern;
-//
-//    _puzzleVerifyView.puzzleBlankAlpha = 0.7;
-//    _puzzleVerifyView.puzzleBlankInnerShadowColor = [UIColor redColor];
-//    _puzzleVerifyView.puzzleBlankInnerShadowRadius = 12;
-//    _puzzleVerifyView.puzzleBlankInnerShadowOpacity = 0.9;
-//    _puzzleVerifyView.puzzleBlankInnerShadowOffset = CGSizeMake(2, 2);
-//
-//    _puzzleVerifyView.puzzleShadowColor = [UIColor greenColor];
-//    _puzzleVerifyView.puzzleShadowRadius = 10;
-//    _puzzleVerifyView.puzzleShadowOffset = CGSizeMake(2, 2);
-    
-    
-    
-    
 }
+
 -(void)reloadVC{
     //    UIViewController *sourceViewController = (UIViewController*)[self sourceViewController];
     //    UIViewController *destinationController = (UIViewController*)[self destinationViewController];

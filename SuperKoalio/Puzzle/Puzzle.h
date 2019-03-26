@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Puzzle : NSObject
+@property int tag;
 
 // Puzzle rect size，not for TTGPuzzleVerifyCustomPattern pattern
 @property (nonatomic, assign) CGSize puzzleSize;
@@ -25,16 +26,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) CGPoint puzzleContainerPosition;
 @property (nonatomic, strong) UIView *puzzleImageContainerView;
+@property (nonatomic, strong) UIImageView *puzzleImageView;
 
-
-@property (nonatomic, assign) CGFloat puzzleShadowOpacity; // Default: 0.5
 
 - (void)setPuzzlePosition:(CGPoint)puzzlePosition;
 - (void)setPuzzleBlankPosition;
 
 //-(id)initAsCircle
--(UIView*)createPuzzleImageContainerViewWithBounds:(CGRect)bounds;
--(id)initCirclePuzzleWithSize:(CGSize)size puzzlePosition:(CGPoint)puzzlePosition;
+-(void)createPuzzleImageContainerViewWithBounds:(CGRect)bounds;
+-(id)initCirclePuzzleWithSize:(CGSize)size puzzleSlotPosition:(CGPoint)puzzleSlotPosition  puzzlePosition:(CGPoint)puzzlePosition  tag:(int)tag;
 @end
 
 NS_ASSUME_NONNULL_END

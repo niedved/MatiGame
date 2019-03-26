@@ -10,14 +10,14 @@
 
 @implementation Puzzle
 
--(id)initCirclePuzzleWithSize:(CGSize)size puzzlePosition:(CGPoint)puzzlePosition{
+-(id)initCirclePuzzleWithSize:(CGSize)size puzzleSlotPosition:(CGPoint)puzzleSlotPosition  puzzlePosition:(CGPoint)puzzlePosition tag:(int)tag{
         self = [super init];
         if (self) {
             self.puzzleSize = size;
             self.verificationTolerance = 8;
-            self.puzzleShadowOpacity = 0.5;
-            self.puzzleBlankPosition = CGPointZero;
+            self.puzzleBlankPosition = puzzleSlotPosition;
             self.puzzlePosition = puzzlePosition;
+            self.tag = tag;
         }
         return self;
 }
@@ -32,24 +32,17 @@
     puzzlePosition.y = MAX(0, puzzlePosition.y);
 //    puzzlePosition.y = MIN([self puzzleMaxY], puzzlePosition.y);
     // Reset shadow
-    self.puzzleImageContainerView.layer.shadowOpacity = self.puzzleShadowOpacity;
+    self.puzzleImageContainerView.layer.shadowOpacity = 0.5f;
     
     // Set puzzle image container position
     [self puzzleContainerPosition:CGPointMake(puzzlePosition.x - _puzzleBlankPosition.x,
                                                  puzzlePosition.y - _puzzleBlankPosition.y)];
 }
 
-- (void)setPuzzleShadowOpacity:(CGFloat)puzzleShadowOpacity {
-    _puzzleShadowOpacity = puzzleShadowOpacity;
-    self.puzzleImageContainerView.layer.shadowOpacity = puzzleShadowOpacity;
-}
-
 
 
 
 - (void)setPuzzleBlankPosition {
-    // Reset shadow
-//    _puzzleImageContainerView.layer.shadowOpacity = _puzzleShadowOpacity;
     // Set puzzle image container position
     [self puzzleContainerPosition:CGPointMake(0,0)];
 }
@@ -63,6 +56,14 @@
     self.puzzleImageContainerView.frame = frame;
 }
 
+-(void)preaparePuzzleImageView{
+    // Puzzle piece imageView
+    self.puzzleImageView = [[UIImageView alloc] initWithFrame:self.puzzleImageContainerView.bounds];
+    self.puzzleImageView.userInteractionEnabled = NO;
+    self.puzzleImageView.contentMode = UIViewContentModeScaleToFill;
+    self.puzzleImageView.backgroundColor = [UIColor clearColor];
+    [self.puzzleImageContainerView addSubview:self.puzzleImageView];
+}
 
 -(void)createPuzzleImageContainerViewWithBounds:(CGRect)bounds{
 
@@ -75,10 +76,15 @@ self.puzzleImageContainerView.userInteractionEnabled = NO;
     
 //self.puzzleImageContainerView.layer.shadowColor = _puzzleShadowColor.CGColor;
 //self.puzzleImageContainerView.layer.shadowRadius = _puzzleShadowRadius;
-//self.puzzleImageContainerView.layer.shadowOpacity = _puzzleShadowOpacity;
 //self.puzzleImageContainerView.layer.shadowOffset = _puzzleShadowOffset;
 
+    
+    [self preaparePuzzleImageView];
+    
+
+    
 }
+
 
 
 
