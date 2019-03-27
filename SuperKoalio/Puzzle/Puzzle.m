@@ -10,33 +10,53 @@
 
 @implementation Puzzle
 
+static CGFloat kTTGPuzzleAnimationDuration = 0.3;
+
+
 -(id)initCirclePuzzleWithSize:(CGSize)size puzzleSlotPosition:(CGPoint)puzzleSlotPosition  puzzlePosition:(CGPoint)puzzlePosition tag:(int)tag{
         self = [super init];
         if (self) {
             self.puzzleSize = size;
             self.verificationTolerance = 8;
             self.puzzleBlankPosition = puzzleSlotPosition;
-            self.puzzlePosition = puzzlePosition;
+            [self setPuzzlePositionValue: puzzlePosition];
+            self.draging = NO;
             self.tag = tag;
         }
         return self;
 }
 
+-(void)showPosition{
+    NSLog(@"puzzle position: %f,%f", self.puzzlePosition.x,self.puzzlePosition.y );
+}
+-(CGRect)getPuzzleRect{
+    return CGRectMake(self.puzzlePosition.x, self.puzzlePosition.y, self.puzzleSize.width, self.puzzleSize.height);
+//    NSLog(@"puzzle position: %f,%f", self.puzzlePosition.x,self.puzzlePosition.y );
+}
 
-- (void)setPuzzlePosition:(CGPoint)puzzlePosition {
-    
-    
+-(void)movePuzzleWithAnimation: (CGPoint)position{
+    [UIView animateWithDuration:kTTGPuzzleAnimationDuration animations:^{
+        [self setPuzzlePositionValue:position];
+    }];
+}
+
+- (void)setPuzzlePositionValue:(CGPoint)puzzlePosition {
     // Limit range
     puzzlePosition.x = MAX(0, puzzlePosition.x);
-//    puzzlePosition.x = MIN([self puzzleMaxX], puzzlePosition.x);
     puzzlePosition.y = MAX(0, puzzlePosition.y);
-//    puzzlePosition.y = MIN([self puzzleMaxY], puzzlePosition.y);
+    self.puzzlePosition = puzzlePosition;
     // Reset shadow
     self.puzzleImageContainerView.layer.shadowOpacity = 0.5f;
     
     // Set puzzle image container position
     [self puzzleContainerPosition:CGPointMake(puzzlePosition.x - _puzzleBlankPosition.x,
                                                  puzzlePosition.y - _puzzleBlankPosition.y)];
+    
+}
+
+-(BOOL)positionInsidePuzzle: (CGPoint)position{
+    CGRect rect = [self getPuzzleRect];
+    return CGRectContainsPoint(rect, position);
 }
 
 
@@ -59,6 +79,8 @@
 -(void)preaparePuzzleImageView{
     // Puzzle piece imageView
     self.puzzleImageView = [[UIImageView alloc] initWithFrame:self.puzzleImageContainerView.bounds];
+    
+    
     self.puzzleImageView.userInteractionEnabled = NO;
     self.puzzleImageView.contentMode = UIViewContentModeScaleToFill;
     self.puzzleImageView.backgroundColor = [UIColor clearColor];
@@ -74,10 +96,6 @@ self.puzzleImageContainerView = [[UIView alloc] initWithFrame:CGRectMake(
 self.puzzleImageContainerView.backgroundColor = [UIColor clearColor];
 self.puzzleImageContainerView.userInteractionEnabled = NO;
     
-//self.puzzleImageContainerView.layer.shadowColor = _puzzleShadowColor.CGColor;
-//self.puzzleImageContainerView.layer.shadowRadius = _puzzleShadowRadius;
-//self.puzzleImageContainerView.layer.shadowOffset = _puzzleShadowOffset;
-
     
     [self preaparePuzzleImageView];
     

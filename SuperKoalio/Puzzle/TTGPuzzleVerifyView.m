@@ -96,6 +96,7 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
         return;
     }
 
+    self.draging = NO;
     self.userInteractionEnabled = YES;
     self.clipsToBounds = YES;
 
@@ -122,51 +123,85 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     if (withAnimation) {
         [UIView animateWithDuration:kTTGPuzzleAnimationDuration animations:^{
             if (_enable) {
-                    [self.puzzle1 setPuzzlePosition:self.puzzle1.puzzleBlankPosition];
+                    [self.puzzle1 setPuzzlePositionValue:self.puzzle1.puzzleBlankPosition];
             }
             self.puzzle1.puzzleImageContainerView.layer.shadowOpacity = 0;
         }];
     } else {
         if (_enable) {
-            [self.puzzle1 setPuzzlePosition:self.puzzle1.puzzleBlankPosition];
+            [self.puzzle1 setPuzzlePositionValue:self.puzzle1.puzzleBlankPosition];
         }
         self.puzzle1.puzzleImageContainerView.layer.shadowOpacity = 0;
     }
 }
 
 #pragma mark - Pan gesture
+- (void)onPanGesture_Began:(CGPoint)panLocation{
+    CGPoint position = CGPointZero;
+    position.x = panLocation.x - self.puzzle1.puzzleSize.width / 2;
+    position.y = panLocation.y - self.puzzle1.puzzleSize.height / 2;
+    
+    if ( [self.puzzle1 positionInsidePuzzle:panLocation] ) {
+        self.draging = YES;
+        self.puzzle1.draging = YES;
+        [self.puzzle1 movePuzzleWithAnimation:position];
+    }
+    else if ( [self.puzzle2 positionInsidePuzzle:panLocation] ) {
+        self.draging = YES;
+        self.puzzle2.draging = YES;
+        [self.puzzle2 movePuzzleWithAnimation:position];
+    }
+    else if ( [self.puzzle3 positionInsidePuzzle:panLocation] ) {
+        self.draging = YES;
+        self.puzzle3.draging = YES;
+        [self.puzzle3 movePuzzleWithAnimation:position];
+    }
+}
+
+- (void)onPanGesture_Dragin:(CGPoint)panLocation{
+    CGPoint position = CGPointZero;
+    position.x = panLocation.x - self.puzzle1.puzzleSize.width / 2;
+    position.y = panLocation.y - self.puzzle1.puzzleSize.height / 2;
+    
+    if( self.puzzle1.draging ){
+        [self.puzzle1 movePuzzleWithAnimation:position];
+    }
+    else if( self.puzzle2.draging ){
+        [self.puzzle2 movePuzzleWithAnimation:position];
+    }
+    else if( self.puzzle3.draging ){
+        [self.puzzle3 movePuzzleWithAnimation:position];
+    }
+}
+
+- (void)onPanGesture_Done:(CGPoint)panLocation{
+    self.draging = NO;
+    self.puzzle1.draging = NO;
+    self.puzzle2.draging = NO;
+    self.puzzle3.draging = NO;
+}
 
 - (void)onPanGesture:(UIPanGestureRecognizer *)panGestureRecognizer {
     CGPoint panLocation = [panGestureRecognizer locationInView:self];
 
-    // New position
-    CGPoint position = CGPointZero;
-    position.x = panLocation.x - self.puzzle1.puzzleSize.width / 2;
-    position.y = panLocation.y - self.puzzle1.puzzleSize.height / 2;
-
-    // Update position
+//    // Update position
     if (panGestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        NSLog(@"p1: %f , %f", self.puzzle1.puzzleImageView.frame.size.width, self.puzzle1.puzzleImageView.frame.size.height );
-        if ( [self.puzzle1.puzzleImageView pointInside:panLocation withEvent:nil] ) {
-            // Point lies inside the bounds
-            NSLog(@"inside: ");
-            // Animate move
-            [UIView animateWithDuration:kTTGPuzzleAnimationDuration animations:^{
-                [self.puzzle1 setPuzzlePosition:position];
-            }];
-        }
-        else{
-            NSLog(@"outside");
+        [self onPanGesture_Began:panLocation];
+    }
+    else if ( panGestureRecognizer.state == UIGestureRecognizerStateEnded || panGestureRecognizer.state == UIGestureRecognizerStateCancelled || panGestureRecognizer.state == UIGestureRecognizerStateFailed  ){
+        [self onPanGesture_Done:panLocation];
+    }
+    else{
+        if( self.draging ){
+            [self onPanGesture_Dragin:panLocation];
+                
         }
         
-        
-        
-    } else {
-//        [self.puzzle1 setPuzzlePosition:position];
     }
     
+    
     // Callback
-//    [self performCallback];
+    [self performCallback];
 }
 
 #pragma mark - Override
@@ -371,7 +406,7 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     // Change position
     CGPoint position = [self puzzlePosition];
     position.x = puzzleXPercentage * ([self puzzleMaxX] - [self puzzleMinX]) + [self puzzleMinX];
-    [self.puzzle1 setPuzzlePosition:position];
+    [self.puzzle1 setPuzzlePositionValue:position];
     
     // Callback
     [self performCallback];
@@ -395,7 +430,7 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     // Change position
     CGPoint position = [self puzzlePosition];
     position.y = puzzleYPercentage * ([self puzzleMaxY] - [self puzzleMinY]) + [self puzzleMinY];
-    [self.puzzle1 setPuzzlePosition:position];
+    [self.puzzle1 setPuzzlePositionValue:position];
     
     // Callback
     [self performCallback];

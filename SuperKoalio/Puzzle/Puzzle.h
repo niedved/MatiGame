@@ -28,9 +28,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIView *puzzleImageContainerView;
 @property (nonatomic, strong) UIImageView *puzzleImageView;
 
+@property (nonatomic, assign) BOOL draging;
 
-- (void)setPuzzlePosition:(CGPoint)puzzlePosition;
+-(void)movePuzzleWithAnimation: (CGPoint)position;
+- (void)setPuzzlePositionValue:(CGPoint)puzzlePosition;
 - (void)setPuzzleBlankPosition;
+
+-(BOOL)positionInsidePuzzle: (CGPoint)position;
+
+-(void)showPosition;
+-(CGRect)getPuzzleRect;
 
 //-(id)initAsCircle
 -(void)createPuzzleImageContainerViewWithBounds:(CGRect)bounds;

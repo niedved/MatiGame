@@ -52,6 +52,7 @@ typedef NS_ENUM(NSInteger, TTGPuzzleVerifyPattern) {
 
 // Enable
 @property (nonatomic, assign) BOOL enable;
+@property (nonatomic, assign) BOOL draging;
 
 /**
  * Style
