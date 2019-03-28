@@ -13,6 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Puzzle : NSObject
 @property int tag;
 
+
+@property (nonatomic, assign) BOOL enable;
+
+
 // Puzzle rect size，not for TTGPuzzleVerifyCustomPattern pattern
 @property (nonatomic, assign) CGSize puzzleSize;
 
@@ -34,11 +38,22 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setPuzzlePositionValue:(CGPoint)puzzlePosition;
 - (void)setPuzzleBlankPosition;
 
--(BOOL)positionInsidePuzzle: (CGPoint)position;
+- (UIBezierPath *)getNewScaledPuzzledPath;
 
+-(BOOL)positionInsidePuzzle: (CGPoint)position;
+// Puzzle position
+- (CGPoint)puzzlePosition;
 -(void)showPosition;
 -(CGRect)getPuzzleRect;
 
+- (BOOL)isVerified;
+
+/*
+Complete verification. Call this with set the puzzle to its original position and fill the blank.
+
+@param withAnimation if show animation
+*/
+- (void)completeVerificationWithAnimation:(BOOL)withAnimation;
 //-(id)initAsCircle
 -(void)createPuzzleImageContainerViewWithBounds:(CGRect)bounds;
 -(id)initCirclePuzzleWithSize:(CGSize)size puzzleSlotPosition:(CGPoint)puzzleSlotPosition  puzzlePosition:(CGPoint)puzzlePosition  tag:(int)tag;

@@ -39,14 +39,6 @@ typedef NS_ENUM(NSInteger, TTGPuzzleVerifyPattern) {
 @property (nonatomic, strong) Puzzle *puzzle3; // Puzzle
 @property (nonatomic, strong) Puzzle *puzzleCurrentlyDraging; // Puzzle
 
-// Puzzle pattern, default is TTGPuzzleVerifyClassicPattern
-@property (nonatomic, assign) TTGPuzzleVerifyPattern puzzlePattern;
-
-// Verification
-@property (nonatomic, assign, readonly) BOOL isVerified; // Verification boolean
-
-// Enable
-@property (nonatomic, assign) BOOL enable;
 @property (nonatomic, assign) BOOL draging;
 
 
@@ -55,11 +47,5 @@ typedef NS_ENUM(NSInteger, TTGPuzzleVerifyPattern) {
 @property (nonatomic, copy) void (^verificationChangeBlock)(TTGPuzzleVerifyView *puzzleVerifyView, BOOL isVerified); // verification changed callback block
 
 
-/**
- Complete verification. Call this with set the puzzle to its original position and fill the blank.
-
- @param withAnimation if show animation
- */
-- (void)completeVerificationWithAnimation:(BOOL)withAnimation puzzle:(Puzzle*)puzzle;
 
 @end

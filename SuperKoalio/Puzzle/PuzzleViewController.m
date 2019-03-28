@@ -80,9 +80,9 @@
 #pragma mark - TTGPuzzleVerifyViewDelegate
 
 - (void)puzzleVerifyView:(TTGPuzzleVerifyView *)puzzleVerifyView didChangedVerification:(BOOL)isVerified puzzle:(Puzzle*)puzzle {
-    if ([_puzzleVerifyView isVerified]) {
-        [_puzzleVerifyView completeVerificationWithAnimation:YES puzzle:puzzle];
-        _puzzleVerifyView.enable = NO;
+    if ([_puzzleVerifyView.puzzleCurrentlyDraging isVerified]) {
+        [_puzzleVerifyView.puzzleCurrentlyDraging completeVerificationWithAnimation:YES];
+        _puzzleVerifyView.puzzleCurrentlyDraging.enable = NO;
         [self playYEAH];
         
         [self performSelector:@selector(reloadVC) withObject:nil afterDelay:2.0];
