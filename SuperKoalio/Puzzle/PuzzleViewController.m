@@ -79,9 +79,9 @@
 
 #pragma mark - TTGPuzzleVerifyViewDelegate
 
-- (void)puzzleVerifyView:(TTGPuzzleVerifyView *)puzzleVerifyView didChangedVerification:(BOOL)isVerified {
+- (void)puzzleVerifyView:(TTGPuzzleVerifyView *)puzzleVerifyView didChangedVerification:(BOOL)isVerified puzzle:(Puzzle*)puzzle {
     if ([_puzzleVerifyView isVerified]) {
-        [_puzzleVerifyView completeVerificationWithAnimation:YES];
+        [_puzzleVerifyView completeVerificationWithAnimation:YES puzzle:puzzle];
         _puzzleVerifyView.enable = NO;
         [self playYEAH];
         

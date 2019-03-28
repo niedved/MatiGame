@@ -119,7 +119,7 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 
 #pragma mark - Public methods
 
-- (void)completeVerificationWithAnimation:(BOOL)withAnimation {
+- (void)completeVerificationWithAnimation:(BOOL)withAnimation puzzle:(Puzzle*)puzzle{
     if (withAnimation) {
         [UIView animateWithDuration:kTTGPuzzleAnimationDuration animations:^{
             if (_enable) {
@@ -143,16 +143,19 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     
     if ( [self.puzzle1 positionInsidePuzzle:panLocation] ) {
         self.draging = YES;
+        self.puzzleCurrentlyDraging = self.puzzle1;
         self.puzzle1.draging = YES;
         [self.puzzle1 movePuzzleWithAnimation:position];
     }
     else if ( [self.puzzle2 positionInsidePuzzle:panLocation] ) {
         self.draging = YES;
+        self.puzzleCurrentlyDraging = self.puzzle2;
         self.puzzle2.draging = YES;
         [self.puzzle2 movePuzzleWithAnimation:position];
     }
     else if ( [self.puzzle3 positionInsidePuzzle:panLocation] ) {
         self.draging = YES;
+        self.puzzleCurrentlyDraging = self.puzzle3;
         self.puzzle3.draging = YES;
         [self.puzzle3 movePuzzleWithAnimation:position];
     }
@@ -179,6 +182,8 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     self.puzzle1.draging = NO;
     self.puzzle2.draging = NO;
     self.puzzle3.draging = NO;
+    
+    self.puzzleCurrentlyDraging = nil;
 }
 
 - (void)onPanGesture:(UIPanGestureRecognizer *)panGestureRecognizer {
@@ -194,14 +199,11 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     else{
         if( self.draging ){
             [self onPanGesture_Dragin:panLocation];
-                
         }
-        
     }
     
-    
     // Callback
-    [self performCallback];
+    [self performCallback:self.puzzleCurrentlyDraging];
 }
 
 #pragma mark - Override
@@ -272,11 +274,10 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 
 #pragma mark - Callback
 
-- (void)performCallback {
+- (void)performCallback: (Puzzle*)puzzle {
     // Callback for position change
-    if ([_delegate respondsToSelector:@selector(puzzleVerifyView:didChangedPuzzlePosition:xPercentage:yPercentage:)]) {
-        [_delegate puzzleVerifyView:self didChangedPuzzlePosition:[self puzzlePosition]
-                        xPercentage:[self puzzleXPercentage] yPercentage:[self puzzleYPercentage]];
+    if ([_delegate respondsToSelector:@selector(puzzleVerifyView:didChangedPuzzlePosition:)]) {
+        [_delegate puzzleVerifyView:self didChangedPuzzlePosition:[self puzzlePosition]];
     }
     
     // Callback if verification changed
@@ -284,8 +285,8 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
         _lastVerification = [self isVerified];
         
         // Delegate
-        if ([_delegate respondsToSelector:@selector(puzzleVerifyView:didChangedVerification:)]) {
-            [_delegate puzzleVerifyView:self didChangedVerification:[self isVerified]];
+        if ([_delegate respondsToSelector:@selector(puzzleVerifyView:didChangedVerification:puzzle:)]) {
+            [_delegate puzzleVerifyView:self didChangedVerification:[self isVerified] puzzle:puzzle];
         }
         
         // Block
@@ -300,17 +301,11 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 - (UIBezierPath *)getNewScaledPuzzledPath {
     UIBezierPath *path = nil;
     
-    // Pattern path
-//    if (_puzzlePattern == TTGPuzzleVerifyCustomPattern) {
-//        path = [UIBezierPath bezierPathWithCGPath:_customPuzzlePatternPath.CGPath];
-//        self.puzzle.puzzleSize = path.bounds.size;
-//    } else {
         path = [UIBezierPath bezierPathWithCGPath:[TTGPuzzleVerifyView verifyPathForPattern:_puzzlePattern].CGPath];
         // Apply scale transform
         [path applyTransform:CGAffineTransformMakeScale(
                                                         self.puzzle1.puzzleSize.width / path.bounds.size.width,
                                                         self.puzzle1.puzzleSize.height / path.bounds.size.height)];
-//    }
     
     // Apply position transform
     [path applyTransform:CGAffineTransformMakeTranslation(
@@ -321,30 +316,24 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 }
 
 // Puzzle position
-
-
-
 - (CGPoint)puzzlePosition {
     return CGPointMake(self.puzzle1.puzzleContainerPosition.x + self.puzzle1.puzzleBlankPosition.x,
                        self.puzzle1.puzzleContainerPosition.y + self.puzzle1.puzzleBlankPosition.y);
 }
 
 // Puzzle blank position
-
 - (void)setPuzzleBlankPosition:(CGPoint)puzzleBlankPosition {
     self.puzzle1.puzzleBlankPosition = puzzleBlankPosition;
     [self updatePuzzleMask];
 }
 
 // Puzzle pattern
-
 - (void)setPuzzlePattern:(TTGPuzzleVerifyPattern)puzzlePattern {
     _puzzlePattern = puzzlePattern;
     [self updatePuzzleMask];
 }
 
 // Image
-
 - (void)setImage:(UIImage *)image {
     _image = image;
     _backImageView.image = _image;
@@ -353,96 +342,10 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     [self updatePuzzleMask];
 }
 
-// Puzzle size
-
-- (void)setPuzzleSize:(CGSize)puzzleSize {
-    self.puzzle1.puzzleSize = puzzleSize;
-    [self updatePuzzleMask];
-}
-
-// Puzzle custom pattern path
-//
-//- (void)setCustomPuzzlePatternPath:(UIBezierPath *)customPuzzlePatternPath {
-//    _customPuzzlePatternPath = customPuzzlePatternPath;
-//    [self updatePuzzleMask];
-//}
-
-
-
-// Puzzle X position percentage
-
-- (CGFloat)puzzleXPercentage {
-    return ([self puzzlePosition].x - [self puzzleMinX]) / ([self puzzleMaxX] - [self puzzleMinX]);
-}
-
-
-// Puzzle position range
-
-- (CGFloat)puzzleMinX {
-    return 0;
-}
-
-- (CGFloat)puzzleMaxX {
-    return CGRectGetWidth(self.bounds) - self.puzzle1.puzzleSize.width;
-}
-
-- (CGFloat)puzzleMinY {
-    return 0;
-}
-
-- (CGFloat)puzzleMaxY {
-    return CGRectGetHeight(self.bounds) - self.puzzle1.puzzleSize.height;
-}
-
-- (void)setPuzzleXPercentage:(CGFloat)puzzleXPercentage {
-    if (!_enable) {
-        return;
-    }
-    
-    // Limit range
-    puzzleXPercentage = MAX(0, puzzleXPercentage);
-    puzzleXPercentage = MIN(1, puzzleXPercentage);
-
-    // Change position
-    CGPoint position = [self puzzlePosition];
-    position.x = puzzleXPercentage * ([self puzzleMaxX] - [self puzzleMinX]) + [self puzzleMinX];
-    [self.puzzle1 setPuzzlePositionValue:position];
-    
-    // Callback
-    [self performCallback];
-}
-
-// Puzzle Y position percentage
-
-- (CGFloat)puzzleYPercentage {
-    return ([self puzzlePosition].y - [self puzzleMinY]) / ([self puzzleMaxY] - [self puzzleMinY]);
-}
-
-- (void)setPuzzleYPercentage:(CGFloat)puzzleYPercentage {
-    if (!_enable) {
-        return;
-    }
-    
-    // Limit range
-    puzzleYPercentage = MAX(0, puzzleYPercentage);
-    puzzleYPercentage = MIN(1, puzzleYPercentage);
-
-    // Change position
-    CGPoint position = [self puzzlePosition];
-    position.y = puzzleYPercentage * ([self puzzleMaxY] - [self puzzleMinY]) + [self puzzleMinY];
-    [self.puzzle1 setPuzzlePositionValue:position];
-    
-    // Callback
-    [self performCallback];
-}
-
 // isVerified
-
 - (BOOL)isVerified {
     return fabsf([self puzzlePosition].x - self.puzzle1.puzzleBlankPosition.x) <= self.puzzle1.verificationTolerance &&
            fabsf([self puzzlePosition].y - self.puzzle1.puzzleBlankPosition.y) <= self.puzzle1.verificationTolerance;
 }
-
-
 
 @end

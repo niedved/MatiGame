@@ -25,10 +25,8 @@ typedef NS_ENUM(NSInteger, TTGPuzzleVerifyPattern) {
  */
 @protocol TTGPuzzleVerifyViewDelegate <NSObject>
 @optional
-- (void)puzzleVerifyView:(TTGPuzzleVerifyView *)puzzleVerifyView didChangedVerification:(BOOL)isVerified;
-
-- (void)puzzleVerifyView:(TTGPuzzleVerifyView *)puzzleVerifyView didChangedPuzzlePosition:(CGPoint)newPosition
-             xPercentage:(CGFloat)xPercentage yPercentage:(CGFloat)yPercentage;
+- (void)puzzleVerifyView:(TTGPuzzleVerifyView *)puzzleVerifyView didChangedVerification:(BOOL)isVerified puzzle:(Puzzle*)puzzle;
+- (void)puzzleVerifyView:(TTGPuzzleVerifyView *)puzzleVerifyView didChangedPuzzlePosition:(CGPoint)newPosition;
 @end
 
 /**
@@ -39,13 +37,10 @@ typedef NS_ENUM(NSInteger, TTGPuzzleVerifyPattern) {
 @property (nonatomic, strong) Puzzle *puzzle1; // Puzzle
 @property (nonatomic, strong) Puzzle *puzzle2; // Puzzle
 @property (nonatomic, strong) Puzzle *puzzle3; // Puzzle
+@property (nonatomic, strong) Puzzle *puzzleCurrentlyDraging; // Puzzle
 
 // Puzzle pattern, default is TTGPuzzleVerifyClassicPattern
 @property (nonatomic, assign) TTGPuzzleVerifyPattern puzzlePattern;
-
-// Puzzle current X and Y position percentage, range: [0, 1]
-@property (nonatomic, assign) CGFloat puzzleXPercentage;
-@property (nonatomic, assign) CGFloat puzzleYPercentage;
 
 // Verification
 @property (nonatomic, assign, readonly) BOOL isVerified; // Verification boolean
@@ -53,10 +48,6 @@ typedef NS_ENUM(NSInteger, TTGPuzzleVerifyPattern) {
 // Enable
 @property (nonatomic, assign) BOOL enable;
 @property (nonatomic, assign) BOOL draging;
-
-/**
- * Style
- */
 
 
 // Callback
@@ -69,6 +60,6 @@ typedef NS_ENUM(NSInteger, TTGPuzzleVerifyPattern) {
 
  @param withAnimation if show animation
  */
-- (void)completeVerificationWithAnimation:(BOOL)withAnimation;
+- (void)completeVerificationWithAnimation:(BOOL)withAnimation puzzle:(Puzzle*)puzzle;
 
 @end
