@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, TTGPuzzleVerifyPattern) {
 @protocol TTGPuzzleVerifyViewDelegate <NSObject>
 @optional
 - (void)puzzleVerifyView:(TTGPuzzleVerifyView *)puzzleVerifyView didChangedVerification:(BOOL)isVerified puzzle:(Puzzle*)puzzle;
-- (void)puzzleVerifyView:(TTGPuzzleVerifyView *)puzzleVerifyView didChangedPuzzlePosition:(CGPoint)newPosition;
+-(void)playYEAH;
 @end
 
 /**
@@ -44,7 +44,6 @@ typedef NS_ENUM(NSInteger, TTGPuzzleVerifyPattern) {
 
 // Callback
 @property (nonatomic, weak) id <TTGPuzzleVerifyViewDelegate> delegate; // Callback delegate
-@property (nonatomic, copy) void (^verificationChangeBlock)(TTGPuzzleVerifyView *puzzleVerifyView, BOOL isVerified); // verification changed callback block
 
 
 

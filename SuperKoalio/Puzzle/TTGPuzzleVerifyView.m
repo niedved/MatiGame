@@ -140,7 +140,7 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     position.x = panLocation.x - self.puzzleCurrentlyDraging.puzzleSize.width / 2;
     position.y = panLocation.y - self.puzzleCurrentlyDraging.puzzleSize.height / 2;
     
-    if( self.puzzleCurrentlyDraging.draging ){
+    if( self.puzzleCurrentlyDraging.draging && self.puzzleCurrentlyDraging.enable){
         [self.puzzleCurrentlyDraging movePuzzleWithAnimation:position];
     }
 }
@@ -240,27 +240,37 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     [_backImageView.layer addSublayer:_backInnerShadowLayer];
 }
 
+- (UIViewController *)currentTopViewController {
+    UIViewController *topVC = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    while (topVC.presentedViewController) {
+        topVC = topVC.presentedViewController;
+    }
+    return topVC;
+}
+
+-(void)dissmissVC{
+    [[self currentTopViewController] dismissViewControllerAnimated:NO completion:nil];
+}
+
+
 #pragma mark - Callback
 
+
 - (void)performCallback {
-    // Callback for position change
-    if ([_delegate respondsToSelector:@selector(puzzleVerifyView:didChangedPuzzlePosition:)]) {
-        [_delegate puzzleVerifyView:self didChangedPuzzlePosition:[self.puzzleCurrentlyDraging puzzlePosition]];
-    }
-    
     // Callback if verification changed
     if (_lastVerification != [self.puzzleCurrentlyDraging isVerified]) {
         _lastVerification = [self.puzzleCurrentlyDraging isVerified];
         
-        // Delegate
-        if ([_delegate respondsToSelector:@selector(puzzleVerifyView:didChangedVerification:puzzle:)]) {
-            [_delegate puzzleVerifyView:self didChangedVerification:[self.puzzleCurrentlyDraging isVerified] puzzle:self.puzzleCurrentlyDraging];
+        if ( _lastVerification ) {
+            [self.puzzleCurrentlyDraging completeVerificationWithAnimation:YES];
+            self.puzzleCurrentlyDraging.enable = NO;
+            [_delegate playYEAH];
         }
         
-        // Block
-        if (_verificationChangeBlock) {
-            _verificationChangeBlock(self, [self.puzzleCurrentlyDraging isVerified]);
-        }
+        [self performSelector:@selector(dissmissVC) withObject:nil afterDelay:2.0];
+        
+        
+        
     }
 }
 
