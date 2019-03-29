@@ -264,14 +264,6 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     }
 }
 
-
-
-// Puzzle blank position
-- (void)setPuzzleBlankPosition:(CGPoint)puzzleBlankPosition {
-    self.puzzle1.puzzleBlankPosition = puzzleBlankPosition;
-    [self updatePuzzleMask];
-}
-
 // Image
 - (void)setImage:(UIImage *)image {
     _image = image;
