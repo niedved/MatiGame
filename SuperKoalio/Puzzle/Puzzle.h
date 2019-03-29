@@ -29,8 +29,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGFloat verificationTolerance; // Verification tolerance, default is 8
 
 @property (nonatomic, assign) CGPoint puzzleContainerPosition;
-@property (nonatomic, strong) UIView *puzzleImageContainerView;
+
+
 @property (nonatomic, strong) UIImageView *puzzleImageView;
+@property (nonatomic, strong) UIView *puzzleSlotImageView;
+@property (nonatomic, strong) UIColor *color;
 
 @property (nonatomic, assign) BOOL draging;
 
@@ -47,16 +50,14 @@ NS_ASSUME_NONNULL_BEGIN
 -(CGRect)getPuzzleRect;
 
 - (BOOL)isVerified;
-
+-(void)checkPuzzleInSlot;
 /*
 Complete verification. Call this with set the puzzle to its original position and fill the blank.
 
 @param withAnimation if show animation
 */
 - (void)completeVerificationWithAnimation:(BOOL)withAnimation;
-//-(id)initAsCircle
--(void)createPuzzleImageContainerViewWithBounds:(CGRect)bounds;
--(id)initCirclePuzzleWithSize:(CGSize)size puzzleSlotPosition:(CGPoint)puzzleSlotPosition  puzzlePosition:(CGPoint)puzzlePosition  tag:(int)tag;
+-(id)initCirclePuzzleWithSize:(CGSize)size puzzleSlotPosition:(CGPoint)puzzleSlotPosition  puzzlePosition:(CGPoint)puzzlePosition  tag:(int)tag color:(UIColor*)color;
 @end
 
 NS_ASSUME_NONNULL_END

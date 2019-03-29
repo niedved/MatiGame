@@ -72,19 +72,18 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 }
 
 -(void)preparePuzzles{
-    self.puzzle1 = [[Puzzle alloc] initCirclePuzzleWithSize:CGSizeMake(100, 100) puzzleSlotPosition:CGPointMake(40, 10) puzzlePosition:CGPointMake(40,100) tag:1]; //o,o srodek
-    [self.puzzle1 createPuzzleImageContainerViewWithBounds: self.bounds];
-    [self addSubview:self.puzzle1.puzzleImageContainerView];
+    self.puzzle1 = [[Puzzle alloc] initCirclePuzzleWithSize:CGSizeMake(100, 100) puzzleSlotPosition:CGPointMake(40, 10) puzzlePosition:CGPointMake(40,150) tag:1 color:[UIColor blueColor]]; //o,o srodek
+    [self addSubview:self.puzzle1.puzzleSlotImageView];
+    [self addSubview:self.puzzle1.puzzleImageView];
     
     
-    self.puzzle2 = [[Puzzle alloc] initCirclePuzzleWithSize:CGSizeMake(100, 100) puzzleSlotPosition:CGPointMake(240, 10) puzzlePosition:CGPointMake(240,100) tag:2]; //o,o srodek
-    [self.puzzle2 createPuzzleImageContainerViewWithBounds: self.bounds];
-    [self addSubview:self.puzzle2.puzzleImageContainerView];
+    self.puzzle2 = [[Puzzle alloc] initCirclePuzzleWithSize:CGSizeMake(100, 100) puzzleSlotPosition:CGPointMake(240, 10) puzzlePosition:CGPointMake(240,150) tag:2 color:[UIColor redColor]]; //o,o srodek
+    [self addSubview:self.puzzle2.puzzleSlotImageView];
+    [self addSubview:self.puzzle2.puzzleImageView];
     
-    
-    self.puzzle3 = [[Puzzle alloc] initCirclePuzzleWithSize:CGSizeMake(100, 100) puzzleSlotPosition:CGPointMake(440, 10) puzzlePosition:CGPointMake(440,100) tag:3]; //o,o srodek
-    [self.puzzle3 createPuzzleImageContainerViewWithBounds: self.bounds];
-    [self addSubview:self.puzzle3.puzzleImageContainerView];
+    self.puzzle3 = [[Puzzle alloc] initCirclePuzzleWithSize:CGSizeMake(100, 100) puzzleSlotPosition:CGPointMake(440, 10) puzzlePosition:CGPointMake(440,150) tag:3  color:[UIColor greenColor]]; //o,o srodek
+    [self addSubview:self.puzzle3.puzzleSlotImageView];
+    [self addSubview:self.puzzle3.puzzleImageView];
 }
 
 
@@ -117,6 +116,7 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     CGPoint position = CGPointZero;
     position.x = panLocation.x - self.puzzle1.puzzleSize.width / 2;
     position.y = panLocation.y - self.puzzle1.puzzleSize.height / 2;
+    
     
     if ( [self.puzzle1 positionInsidePuzzle:panLocation] ) {
         self.draging = YES;
@@ -170,7 +170,6 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
         }
     }
     
-    // Callback
     [self performCallback];
 }
 
@@ -181,18 +180,12 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 
     _backImageView.frame = self.bounds;
     _frontImageView.frame = self.bounds;
-    self.puzzle1.puzzleImageContainerView.frame = CGRectMake(
-            self.puzzle1.puzzleContainerPosition.x, self.puzzle1.puzzleContainerPosition.y,
-            CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
-    self.puzzle1.puzzleImageView.frame = self.puzzle1.puzzleImageContainerView.bounds;
-    
-    [self updatePuzzleMask];
 }
 
 - (void)willMoveToSuperview:(UIView *)newSuperview {
     [super willMoveToSuperview:newSuperview];
     if (newSuperview) {
-        [self updatePuzzleMask];
+//        [self updatePuzzleMask];
     }
 }
 
@@ -249,6 +242,7 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 }
 
 -(void)dissmissVC{
+    [_delegate playYEAH];
     [[self currentTopViewController] dismissViewControllerAnimated:NO completion:nil];
 }
 
@@ -267,9 +261,9 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
             [_delegate playYEAH];
         }
         
-        [self performSelector:@selector(dissmissVC) withObject:nil afterDelay:2.0];
-        
-        
+        if( [self.puzzle1 isVerified] && [self.puzzle2 isVerified] && [self.puzzle3 isVerified] ){
+            [self performSelector:@selector(dissmissVC) withObject:nil afterDelay:1.0];
+        }
         
     }
 }
@@ -279,8 +273,10 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     _image = image;
     _backImageView.image = _image;
     _frontImageView.image = _image;
-    self.puzzle1.puzzleImageView.image = _image;
-    [self updatePuzzleMask];
+//    self.puzzle1.puzzleImageView.image = _image;
+//    self.puzzle2.puzzleImageView.image = _image;
+//    self.puzzle3.puzzleImageView.image = _image;
+//    [self updatePuzzleMask];
 }
 
 @end

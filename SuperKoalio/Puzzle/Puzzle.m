@@ -16,24 +16,30 @@
 static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 
 
--(id)initCirclePuzzleWithSize:(CGSize)size puzzleSlotPosition:(CGPoint)puzzleSlotPosition  puzzlePosition:(CGPoint)puzzlePosition tag:(int)tag{
+-(id)initCirclePuzzleWithSize:(CGSize)size puzzleSlotPosition:(CGPoint)puzzleSlotPosition  puzzlePosition:(CGPoint)puzzlePosition tag:(int)tag color:(UIColor*)color{
         self = [super init];
         if (self) {
             self.puzzleSize = size;
+            self.color = color;
             self.verificationTolerance = 8;
             self.puzzleBlankPosition = puzzleSlotPosition;
             [self setPuzzlePositionValue: puzzlePosition];
             self.draging = NO;
             self.tag = tag;
             self.enable = YES;
+            [self preaparePuzzleSlotImage];
+            
+            [self preaparePuzzleImageView];
+            
         }
         return self;
 }
 
-// Puzzle position
-- (CGPoint)puzzlePosition {
-    return CGPointMake(self.puzzleContainerPosition.x + self.puzzleBlankPosition.x,
-                       self.puzzleContainerPosition.y + self.puzzleBlankPosition.y);
+-(void)preaparePuzzleSlotImage{
+    self.puzzleSlotImageView = [[UIView alloc] initWithFrame:CGRectMake(self.puzzleBlankPosition.x, self.puzzleBlankPosition.y, self.puzzleSize.width, self.puzzleSize.height)];
+    self.puzzleSlotImageView.layer.borderColor = self.color.CGColor;
+    self.puzzleSlotImageView.layer.borderWidth = 2.0f;
+    [self.puzzleSlotImageView setBackgroundColor:[self.color colorWithAlphaComponent:0.15f]];
 }
 
 
@@ -57,17 +63,18 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
     puzzlePosition.y = MAX(0, puzzlePosition.y);
     self.puzzlePosition = puzzlePosition;
     // Reset shadow
-    self.puzzleImageContainerView.layer.shadowOpacity = 0.5f;
-    
-    // Set puzzle image container position
-    [self puzzleContainerPosition:CGPointMake(puzzlePosition.x - _puzzleBlankPosition.x,
-                                                 puzzlePosition.y - _puzzleBlankPosition.y)];
-    
+    self.puzzleImageView.layer.shadowOpacity = 0.5f;
+    CGRect frame = self.puzzleImageView.frame;
+    frame.origin = puzzlePosition;
+    self.puzzleImageView.frame = frame;
 }
 
 -(BOOL)positionInsidePuzzle: (CGPoint)position{
+    [self showPosition];
     CGRect rect = [self getPuzzleRect];
-    return CGRectContainsPoint(rect, position);
+    BOOL inside = CGRectContainsPoint(rect, position);
+    NSLog(@"%s: %d", __FUNCTION__, inside );
+    return inside;
 }
 
 
@@ -75,7 +82,6 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 
 - (void)setPuzzleBlankPosition {
     // Set puzzle image container position
-    [self puzzleContainerPosition:CGPointMake(0,0)];
 }
 
 - (UIBezierPath *)getNewScaledPuzzledPath {
@@ -98,41 +104,22 @@ static CGFloat kTTGPuzzleAnimationDuration = 0.3;
 
 
 
-
-// Puzzle container position
-
-- (void)puzzleContainerPosition:(CGPoint)puzzleContainerPosition {
-    self.puzzleContainerPosition = puzzleContainerPosition;
-    CGRect frame = self.puzzleImageContainerView.frame;
-    frame.origin = puzzleContainerPosition;
-    self.puzzleImageContainerView.frame = frame;
-}
-
 -(void)preaparePuzzleImageView{
     // Puzzle piece imageView
-    self.puzzleImageView = [[UIImageView alloc] initWithFrame:self.puzzleImageContainerView.bounds];
-    
+    self.puzzleImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.puzzlePosition.x, self.puzzlePosition.y, self.puzzleSize.width, self.puzzleSize.width)];
+    self.puzzleImageView.layer.borderColor = self.color.CGColor;
+    self.puzzleImageView.layer.borderWidth = 1.0f;
+    self.puzzleImageView.backgroundColor = [self.color colorWithAlphaComponent:0.7f];
     
     self.puzzleImageView.userInteractionEnabled = NO;
     self.puzzleImageView.contentMode = UIViewContentModeScaleToFill;
-    self.puzzleImageView.backgroundColor = [UIColor clearColor];
-    [self.puzzleImageContainerView addSubview:self.puzzleImageView];
 }
 
--(void)createPuzzleImageContainerViewWithBounds:(CGRect)bounds{
 
-// Puzzle piece container view
-self.puzzleImageContainerView = [[UIView alloc] initWithFrame:CGRectMake(
-                                                                                self.puzzleContainerPosition.x, self.puzzleContainerPosition.y,
-                                                                                CGRectGetWidth(bounds), CGRectGetHeight(bounds))];
-self.puzzleImageContainerView.backgroundColor = [UIColor clearColor];
-self.puzzleImageContainerView.userInteractionEnabled = NO;
-    
-    
-    [self preaparePuzzleImageView];
-    
-
-    
+-(void)checkPuzzleInSlot{
+    if( [self isVerified] ){
+        NSLog(@"VERIFIED!!!");
+    }
 }
 
 /*
@@ -146,20 +133,20 @@ Complete verification. Call this with set the puzzle to its original position an
             if (_enable) {
                 [self setPuzzlePositionValue:self.puzzleBlankPosition];
             }
-            self.puzzleImageContainerView.layer.shadowOpacity = 0;
+            self.puzzleImageView.layer.shadowOpacity = 0;
         }];
     } else {
         if (_enable) {
             [self setPuzzlePositionValue:self.puzzleBlankPosition];
         }
-        self.puzzleImageContainerView.layer.shadowOpacity = 0;
+        self.puzzleImageView.layer.shadowOpacity = 0;
     }
 }
 
 
 - (BOOL)isVerified {
-    return fabsf([self puzzlePosition].x - self.puzzleBlankPosition.x) <= self.verificationTolerance &&
-    fabsf([self puzzlePosition].y - self.puzzleBlankPosition.y) <= self.verificationTolerance;
+    return fabsf(self.puzzlePosition.x - self.puzzleBlankPosition.x) <= self.verificationTolerance &&
+    fabsf(self.puzzlePosition.y - self.puzzleBlankPosition.y) <= self.verificationTolerance;
 }
 
 
