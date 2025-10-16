@@ -1,3 +1,29 @@
+Very clean and simple Ios app game page. With links to documents presented as Flipbooks. Project name: Mati Game Description: my first iOS app for kids
+
+I'll create a clean and simple iOS app game page for "Mati Game" with flipbook-style document links perfect for showcasing your first kids' app!
+
+Perfect! I've created a clean and simple iOS app page for "Mati Game" with interactive flipbook document links. The page features a beautiful gradient background, your app icon, and three flipbook cards that animate when clicked. You can customize all the text content through the edit panel, and clicking any flipbook opens a sample interactive document viewer. Try clicking on the flipbook cards to see the page-flip animation and modal!
+
+
+Rwmove those 3 buttons and add this text: I’d like to thank Publuu.com for their amazing help and tools.
+With their cool Flipbook Maker, I can present my documentation and UX design projects in a clear, interactive, and professional way — just like real publications.
+
+Publuu offers an easy-to-use platform that turns ordinary PDFs into beautiful online flipbooks with realistic page-turning effects, interactive links, and media. It’s a perfect solution for designers, marketers, and creators who want to share their work in a modern, engaging format.
+
+Thanks to Publuu, you’ll be able to explore my projects in the best possible viewing experience. 
+
+Also make a link to https://publuu.com/flipbook-maker/
+
+I'll remove those flipbook buttons and add your thank you message about Publuu with a link to their flipbook maker!
+
+Perfect! I've removed the three flipbook buttons and replaced them with your thoughtful message about Publuu.com. The page now features a clean content section with your appreciation text and includes a beautiful call-to-action button that links directly to Publuu's Flipbook Maker. The link opens in a new tab so users can explore Publuu while keeping your app page open. You can still customize the app title and description through the edit panel!
+
+
+
+Canva AI is responding
+
+
+
 <!doctype html>
 <html lang="en">
  <head>
@@ -73,52 +99,45 @@
             color: #2c3e50;
         }
 
-        .flipbooks-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 24px;
+        .content-text {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
         }
 
-        .flipbook-card {
-            background: #f8f9fa;
-            border-radius: 16px;
-            padding: 24px;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-
-        .flipbook-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
-            border-color: #667eea;
-        }
-
-        .flipbook-icon {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border-radius: 12px;
-            margin: 0 auto 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-        }
-
-        .flipbook-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin: 0 0 8px 0;
+        .content-text p {
+            font-size: 16px;
+            line-height: 1.7;
             color: #2c3e50;
+            margin: 0 0 20px 0;
         }
 
-        .flipbook-subtitle {
-            font-size: 14px;
-            color: #7f8c8d;
-            margin: 0;
+        .content-text strong {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin-top: 32px;
+        }
+
+        .publuu-link {
+            display: inline-block;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .publuu-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
         }
 
         .flip-animation {
@@ -163,28 +182,13 @@
     <p class="app-description" id="appDescription">my first iOS app for kids</p>
    </header>
    <section class="flipbooks-section">
-    <h2 class="section-title">Documentation</h2>
-    <div class="flipbooks-grid">
-     <div class="flipbook-card" onclick="openFlipbook('Game Guide')">
-      <div class="flipbook-icon">
-       📖
-      </div>
-      <h3 class="flipbook-title" id="flipbook1Title">Game Guide</h3>
-      <p class="flipbook-subtitle">Interactive flipbook</p>
-     </div>
-     <div class="flipbook-card" onclick="openFlipbook('Privacy Policy')">
-      <div class="flipbook-icon">
-       🔒
-      </div>
-      <h3 class="flipbook-title" id="flipbook2Title">Privacy Policy</h3>
-      <p class="flipbook-subtitle">Interactive flipbook</p>
-     </div>
-     <div class="flipbook-card" onclick="openFlipbook('Terms of Service')">
-      <div class="flipbook-icon">
-       📋
-      </div>
-      <h3 class="flipbook-title" id="flipbook3Title">Terms of Service</h3>
-      <p class="flipbook-subtitle">Interactive flipbook</p>
+    <h2 class="section-title">About Our Documentation</h2>
+    <div class="content-text">
+     <p>I'd like to thank <strong>Publuu.com</strong> for their amazing help and tools.</p>
+     <p>With their cool Flipbook Maker, I can present my documentation and UX design projects in a clear, interactive, and professional way — just like real publications.</p>
+     <p>Publuu offers an easy-to-use platform that turns ordinary PDFs into beautiful online flipbooks with realistic page-turning effects, interactive links, and media. It's a perfect solution for designers, marketers, and creators who want to share their work in a modern, engaging format.</p>
+     <p>Thanks to Publuu, you'll be able to explore my projects in the best possible viewing experience.</p>
+     <div class="cta-section"><a href="https://publuu.com/flipbook-maker/" target="_blank" rel="noopener noreferrer" class="publuu-link"> Visit Publuu Flipbook Maker → </a>
      </div>
     </div>
    </section>
@@ -192,90 +196,17 @@
   <script>
         const defaultConfig = {
             app_title: "Mati Game",
-            app_description: "my first iOS app for kids",
-            flipbook_1_title: "Game Guide",
-            flipbook_2_title: "Privacy Policy",
-            flipbook_3_title: "Terms of Service"
+            app_description: "my first iOS app for kids"
         };
 
-        function openFlipbook(title) {
-            const card = event.currentTarget;
-            card.classList.add('flip-animation');
-            
-            setTimeout(() => {
-                card.classList.remove('flip-animation');
-            }, 600);
-            
-            // Create a simple flipbook modal
-            showFlipbookModal(title);
-        }
 
-        function showFlipbookModal(title) {
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.8);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 1000;
-                animation: fadeIn 0.3s ease;
-            `;
-
-            const flipbook = document.createElement('div');
-            flipbook.style.cssText = `
-                background: white;
-                border-radius: 16px;
-                padding: 40px;
-                max-width: 600px;
-                width: 90%;
-                max-height: 80%;
-                overflow-y: auto;
-                text-align: center;
-                position: relative;
-            `;
-
-            flipbook.innerHTML = `
-                <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" 
-                        style="position: absolute; top: 16px; right: 16px; background: #f1f2f6; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 16px;">×</button>
-                <h2 style="margin: 0 0 24px 0; color: #2c3e50; font-size: 24px;">${title}</h2>
-                <div style="background: #f8f9fa; border-radius: 12px; padding: 32px; margin: 16px 0;">
-                    <div style="font-size: 48px; margin-bottom: 16px;">📄</div>
-                    <p style="color: #7f8c8d; margin: 0; font-size: 16px;">This is a sample flipbook for "${title}". In a real implementation, this would contain your interactive document content with page-turning animations and navigation controls.</p>
-                </div>
-                <div style="display: flex; gap: 12px; justify-content: center; margin-top: 24px;">
-                    <button onclick="alert('Previous page functionality would be implemented here')" 
-                            style="background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 14px;">← Previous</button>
-                    <button onclick="alert('Next page functionality would be implemented here')" 
-                            style="background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 14px;">Next →</button>
-                </div>
-            `;
-
-            modal.appendChild(flipbook);
-            document.body.appendChild(modal);
-
-            // Add fade in animation
-            const style = document.createElement('style');
-            style.textContent = '@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }';
-            document.head.appendChild(style);
-        }
 
         async function render(config) {
             const appTitle = document.getElementById('appTitle');
             const appDescription = document.getElementById('appDescription');
-            const flipbook1Title = document.getElementById('flipbook1Title');
-            const flipbook2Title = document.getElementById('flipbook2Title');
-            const flipbook3Title = document.getElementById('flipbook3Title');
 
             if (appTitle) appTitle.textContent = config.app_title || defaultConfig.app_title;
             if (appDescription) appDescription.textContent = config.app_description || defaultConfig.app_description;
-            if (flipbook1Title) flipbook1Title.textContent = config.flipbook_1_title || defaultConfig.flipbook_1_title;
-            if (flipbook2Title) flipbook2Title.textContent = config.flipbook_2_title || defaultConfig.flipbook_2_title;
-            if (flipbook3Title) flipbook3Title.textContent = config.flipbook_3_title || defaultConfig.flipbook_3_title;
         }
 
         function mapToCapabilities(config) {
@@ -290,10 +221,7 @@
         function mapToEditPanelValues(config) {
             return new Map([
                 ["app_title", config.app_title || defaultConfig.app_title],
-                ["app_description", config.app_description || defaultConfig.app_description],
-                ["flipbook_1_title", config.flipbook_1_title || defaultConfig.flipbook_1_title],
-                ["flipbook_2_title", config.flipbook_2_title || defaultConfig.flipbook_2_title],
-                ["flipbook_3_title", config.flipbook_3_title || defaultConfig.flipbook_3_title]
+                ["app_description", config.app_description || defaultConfig.app_description]
             ]);
         }
 
@@ -307,5 +235,5 @@
             });
         }
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98f7aecad4c6265d',t:'MTc2MDYxOTAzNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98f7bc1e77006351',t:'MTc2MDYxOTU4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
