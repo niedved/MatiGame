@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mati Game - iOS App for Kids</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .app-header {
+            text-align: center;
+            background: white;
+            border-radius: 24px;
+            padding: 40px 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .app-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            border-radius: 26px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .app-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 0 0 12px 0;
+            color: #2c3e50;
+        }
+
+        .app-description {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .flipbooks-section {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 600;
+            text-align: center;
+            margin: 0 0 32px 0;
+            color: #2c3e50;
+        }
+
+        .flipbooks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+        }
+
+        .flipbook-card {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .flipbook-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .flipbook-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 12px;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .flipbook-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+            color: #2c3e50;
+        }
+
+        .flipbook-subtitle {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin: 0;
+        }
+
+        .flip-animation {
+            animation: flipPage 0.6s ease-in-out;
+        }
+
+        @keyframes flipPage {
+            0% { transform: rotateY(0deg); }
+            50% { transform: rotateY(-90deg); }
+            100% { transform: rotateY(0deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 16px;
+            }
+            
+            .app-header, .flipbooks-section {
+                padding: 24px 20px;
+            }
+            
+            .app-title {
+                font-size: 28px;
+            }
+            
+            .flipbooks-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <main class="container">
+   <header class="app-header">
+    <div class="app-icon">
+     🎮
+    </div>
+    <h1 class="app-title" id="appTitle">Mati Game</h1>
+    <p class="app-description" id="appDescription">my first iOS app for kids</p>
+   </header>
+   <section class="flipbooks-section">
+    <h2 class="section-title">Documentation</h2>
+    <div class="flipbooks-grid">
+     <div class="flipbook-card" onclick="openFlipbook('Game Guide')">
+      <div class="flipbook-icon">
+       📖
+      </div>
+      <h3 class="flipbook-title" id="flipbook1Title">Game Guide</h3>
+      <p class="flipbook-subtitle">Interactive flipbook</p>
+     </div>
+     <div class="flipbook-card" onclick="openFlipbook('Privacy Policy')">
+      <div class="flipbook-icon">
+       🔒
+      </div>
+      <h3 class="flipbook-title" id="flipbook2Title">Privacy Policy</h3>
+      <p class="flipbook-subtitle">Interactive flipbook</p>
+     </div>
+     <div class="flipbook-card" onclick="openFlipbook('Terms of Service')">
+      <div class="flipbook-icon">
+       📋
+      </div>
+      <h3 class="flipbook-title" id="flipbook3Title">Terms of Service</h3>
+      <p class="flipbook-subtitle">Interactive flipbook</p>
+     </div>
+    </div>
+   </section>
+  </main>
+  <script>
+        const defaultConfig = {
+            app_title: "Mati Game",
+            app_description: "my first iOS app for kids",
+            flipbook_1_title: "Game Guide",
+            flipbook_2_title: "Privacy Policy",
+            flipbook_3_title: "Terms of Service"
+        };
+
+        function openFlipbook(title) {
+            const card = event.currentTarget;
+            card.classList.add('flip-animation');
+            
+            setTimeout(() => {
+                card.classList.remove('flip-animation');
+            }, 600);
+            
+            // Create a simple flipbook modal
+            showFlipbookModal(title);
+        }
+
+        function showFlipbookModal(title) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                animation: fadeIn 0.3s ease;
+            `;
+
+            const flipbook = document.createElement('div');
+            flipbook.style.cssText = `
+                background: white;
+                border-radius: 16px;
+                padding: 40px;
+                max-width: 600px;
+                width: 90%;
+                max-height: 80%;
+                overflow-y: auto;
+                text-align: center;
+                position: relative;
+            `;
+
+            flipbook.innerHTML = `
+                <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" 
+                        style="position: absolute; top: 16px; right: 16px; background: #f1f2f6; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 16px;">×</button>
+                <h2 style="margin: 0 0 24px 0; color: #2c3e50; font-size: 24px;">${title}</h2>
+                <div style="background: #f8f9fa; border-radius: 12px; padding: 32px; margin: 16px 0;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">📄</div>
+                    <p style="color: #7f8c8d; margin: 0; font-size: 16px;">This is a sample flipbook for "${title}". In a real implementation, this would contain your interactive document content with page-turning animations and navigation controls.</p>
+                </div>
+                <div style="display: flex; gap: 12px; justify-content: center; margin-top: 24px;">
+                    <button onclick="alert('Previous page functionality would be implemented here')" 
+                            style="background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 14px;">← Previous</button>
+                    <button onclick="alert('Next page functionality would be implemented here')" 
+                            style="background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 14px;">Next →</button>
+                </div>
+            `;
+
+            modal.appendChild(flipbook);
+            document.body.appendChild(modal);
+
+            // Add fade in animation
+            const style = document.createElement('style');
+            style.textContent = '@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }';
+            document.head.appendChild(style);
+        }
+
+        async function render(config) {
+            const appTitle = document.getElementById('appTitle');
+            const appDescription = document.getElementById('appDescription');
+            const flipbook1Title = document.getElementById('flipbook1Title');
+            const flipbook2Title = document.getElementById('flipbook2Title');
+            const flipbook3Title = document.getElementById('flipbook3Title');
+
+            if (appTitle) appTitle.textContent = config.app_title || defaultConfig.app_title;
+            if (appDescription) appDescription.textContent = config.app_description || defaultConfig.app_description;
+            if (flipbook1Title) flipbook1Title.textContent = config.flipbook_1_title || defaultConfig.flipbook_1_title;
+            if (flipbook2Title) flipbook2Title.textContent = config.flipbook_2_title || defaultConfig.flipbook_2_title;
+            if (flipbook3Title) flipbook3Title.textContent = config.flipbook_3_title || defaultConfig.flipbook_3_title;
+        }
+
+        function mapToCapabilities(config) {
+            return {
+                recolorables: [],
+                borderables: [],
+                fontEditable: undefined,
+                fontSizeable: undefined
+            };
+        }
+
+        function mapToEditPanelValues(config) {
+            return new Map([
+                ["app_title", config.app_title || defaultConfig.app_title],
+                ["app_description", config.app_description || defaultConfig.app_description],
+                ["flipbook_1_title", config.flipbook_1_title || defaultConfig.flipbook_1_title],
+                ["flipbook_2_title", config.flipbook_2_title || defaultConfig.flipbook_2_title],
+                ["flipbook_3_title", config.flipbook_3_title || defaultConfig.flipbook_3_title]
+            ]);
+        }
+
+        // Initialize the SDK
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                render,
+                mapToCapabilities,
+                mapToEditPanelValues
+            });
+        }
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98f7aecad4c6265d',t:'MTc2MDYxOTAzNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
